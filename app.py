@@ -1,11 +1,26 @@
 import json
 from firecrawl import FirecrawlApp
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from urllib.parse import quote
+import os
 
 class TRDizinScraper:
-    def __init__(self):
-        self.fc = FirecrawlApp(api_key="YOUR_API_KEY")
+    def __init__(self, api_key: Optional[str] = None):
+        """
+        TR Dizin Scraper sınıfı
+        
+        Args:
+            api_key: Firecrawl API anahtarı. Eğer verilmezse FIRECRAWL_API_KEY environment variable'ından alınır.
+        """
+        if api_key:
+            self.api_key = api_key
+        else:
+            self.api_key = os.getenv('FIRECRAWL_API_KEY')
+            
+        if not self.api_key:
+            raise ValueError("Firecrawl API anahtarı gerekli! Lütfen FIRECRAWL_API_KEY environment variable'ını ayarlayın veya api_key parametresini kullanın.")
+            
+        self.fc = FirecrawlApp(api_key=self.api_key)
         self.base_url = "https://search.trdizin.gov.tr"
 
     def search_publications(self, query: str, order: str = "publicationYear-DESC", page: int = 1, limit: int = 20) -> Dict[str, Any]:

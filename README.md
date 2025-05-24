@@ -7,39 +7,67 @@ TR Dizin veritabanında arama yapmak için geliştirilmiş MCP (Model Context Pr
 - **Yayın Arama**: TR Dizin'de makale ve yayın arama
 - **Dergi Arama**: TR Dizin'de dergi arama  
 - **Yazar Arama**: TR Dizin'de yazar arama
+- **Smithery Desteği**: Smithery platformu üzerinden kolay kurulum ve kullanım
 
-## macOS'ta Kurulum
+## Smithery ile Kurulum (Önerilen)
 
-### 1. Python sanal ortamı oluşturun (önerilen)
+Bu MCP server Smithery platformu üzerinden kolayca kullanılabilir:
+
+1. [Smithery](https://smithery.ai) hesabınıza giriş yapın
+2. TR Dizin MCP Server'ı bulun ve yükleyin
+3. Firecrawl API anahtarınızı yapılandırmaya ekleyin
+4. Claude Desktop veya diğer MCP istemcilerinizde kullanmaya başlayın
+
+### Firecrawl API Key Alma
+
+1. [Firecrawl.dev](https://firecrawl.dev) adresine gidin
+2. Hesap oluşturun veya giriş yapın
+3. API anahtarınızı alın (fc- ile başlar)
+4. Bu anahtarı Smithery yapılandırmasında kullanın
+
+## Manuel Kurulum (Geliştirici)
+
+### Gereksinimler
+
+- Python 3.11+
+- Firecrawl API anahtarı
+
+### Kurulum Adımları
+
 ```bash
+# 1. Repoyu klonlayın
+git clone <repo-url>
+cd trdizin-mcp
+
+# 2. Sanal ortam oluşturun
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # Linux/macOS
+# veya
+venv\Scripts\activate     # Windows
+
+# 3. Bağımlılıkları yükleyin
+pip install -r requirements.txt
+
+# 4. Environment variable ayarlayın
+export FIRECRAWL_API_KEY="your-api-key-here"
+
+# 5. Server'ı çalıştırın
+python server.py
 ```
 
-### 2. Bağımlılıkları yükleyin
-```bash
-pip3 install -r requirements.txt
-```
+### Claude Desktop ile Manuel Kullanım
 
-## Kullanım
-
-### Geliştirme modunda çalıştırma
-```bash
-python3 server.py
-```
-
-### Claude Desktop ile Kullanım
-
-Claude Desktop uygulamasında kullanmak için `~/Library/Application Support/Claude/claude_desktop_config.json` dosyasına ekleyin:
+`~/Library/Application Support/Claude/claude_desktop_config.json` dosyasına ekleyin:
 
 ```json
 {
   "mcpServers": {
     "trdizin": {
       "command": "python3",
-      "args": ["/Users/utkuunluer/Desktop/trdizinmcp/server.py"],
+      "args": ["/path/to/trdizin-mcp/server.py"],
       "env": {
-        "PYTHONPATH": "/Users/utkuunluer/Desktop/trdizinmcp"
+        "FIRECRAWL_API_KEY": "your-api-key-here",
+        "PYTHONPATH": "/path/to/trdizin-mcp"
       }
     }
   }
@@ -52,85 +80,130 @@ Claude Desktop uygulamasında kullanmak için `~/Library/Application Support/Cla
 TR Dizin'de yayın arar.
 
 **Parametreler:**
-- `query`: Arama terimi
-- `order`: Sıralama (publicationYear-DESC, publicationYear-ASC, relevance-DESC, title-ASC)
+- `query`: Arama terimi (zorunlu)
+- `order`: Sıralama seçenekleri:
+  - `publicationYear-DESC` (varsayılan): Yayın yılına göre azalan
+  - `publicationYear-ASC`: Yayın yılına göre artan
+  - `relevance-DESC`: İlgiye göre azalan
+  - `title-ASC`: Başlığa göre artan
 - `page`: Sayfa numarası (varsayılan: 1)
-- `limit`: Sayfa başına sonuç sayısı (varsayılan: 20)
+- `limit`: Sayfa başına sonuç sayısı (varsayılan: 20, maksimum: 100)
+
+**Örnek Kullanım:**
+```
+TR Dizin'de "makine öğrenmesi" konusunda yayın ara
+```
 
 ### search_trdizin_journals  
 TR Dizin'de dergi arar.
 
 **Parametreler:**
-- `query`: Arama terimi
-- `order`: Sıralama (title-ASC, title-DESC, relevance-DESC)
+- `query`: Arama terimi (zorunlu)
+- `order`: Sıralama seçenekleri:
+  - `title-ASC` (varsayılan): Başlığa göre artan
+  - `title-DESC`: Başlığa göre azalan
+  - `relevance-DESC`: İlgiye göre azalan
 - `page`: Sayfa numarası (varsayılan: 1)
-- `limit`: Sayfa başına sonuç sayısı (varsayılan: 20)
+- `limit`: Sayfa başına sonuç sayısı (varsayılan: 20, maksimum: 100)
+
+**Örnek Kullanım:**
+```
+TR Dizin'de "bilgisayar" içeren dergileri ara
+```
 
 ### search_trdizin_authors
 TR Dizin'de yazar arar.
 
 **Parametreler:**
-- `query`: Arama terimi
-- `order`: Sıralama (relevance-DESC, name-ASC, name-DESC)
+- `query`: Arama terimi (zorunlu)
+- `order`: Sıralama seçenekleri:
+  - `relevance-DESC` (varsayılan): İlgiye göre azalan
+  - `name-ASC`: İsme göre artan
+  - `name-DESC`: İsme göre azalan
 - `page`: Sayfa numarası (varsayılan: 1)
-- `limit`: Sayfa başına sonuç sayısı (varsayılan: 20)
+- `limit`: Sayfa başına sonuç sayısı (varsayılan: 20, maksimum: 100)
 
-## 🚀 macOS'ta Adım Adım Kurulum
-
-```bash
-# 1. Proje dizinine gidin
-cd /Users/utkuunluer/Desktop/trdizinmcp
-
-# 2. Python sanal ortamı oluşturun
-python3 -m venv venv
-
-# 3. Sanal ortamı etkinleştirin
-source venv/bin/activate
-
-# 4. Bağımlılıkları yükleyin
-pip3 install -r requirements.txt
-
-# 5. Server'ı çalıştırın
-python3 server.py
+**Örnek Kullanım:**
+```
+TR Dizin'de "Ahmet Özkan" yazarını ara
 ```
 
-## Docker ile Çalıştırma (Opsiyonel)
+## Docker ile Çalıştırma
 
 ```bash
 # Docker image oluşturun
 docker build -t trdizin-mcp .
 
 # Container'ı çalıştırın
-docker run -it trdizin-mcp
+docker run -e FIRECRAWL_API_KEY="your-api-key" -it trdizin-mcp
 ```
 
-## Terminal Komutları
+## Geliştirme
 
-### Sanal ortamı her seferinde etkinleştirmek için:
+### Test Etme
+
+MCP Inspector kullanarak test edebilirsiniz:
+
 ```bash
-cd /Users/utkuunluer/Desktop/trdizinmcp
-source venv/bin/activate
-python3 server.py
+# MCP Inspector'ı yükleyin
+npm install -g @modelcontextprotocol/inspector
+
+# Server'ı test edin
+mcp-inspector python server.py
 ```
 
-### Sanal ortamdan çıkmak için:
+### Hata Ayıklama
+
+Verbose logging için:
+
 ```bash
-deactivate
+export DEBUG=1
+python server.py
 ```
 
-## Troubleshooting
+## Sorun Giderme
 
-### Python3 bulunamıyor hatası:
-```bash
-# Homebrew ile Python yükleyin
-brew install python3
-```
+### Yaygın Hatalar
 
-### Permission denied hatası:
-```bash
-chmod +x server.py
-```
+1. **"Firecrawl API key is required"**
+   - Firecrawl API anahtarınızın doğru yapılandırıldığından emin olun
+   - API anahtarının geçerli olduğunu kontrol edin
+
+2. **"Module not found"**
+   - Tüm bağımlılıkların yüklendiğinden emin olun: `pip install -r requirements.txt`
+   - Python path'ının doğru ayarlandığından emin olun
+
+3. **"Connection timeout"**
+   - İnternet bağlantınızı kontrol edin
+   - TR Dizin sitesinin erişilebilir olduğunu kontrol edin
+
+### Destek
+
+- Sorunlar için GitHub Issues kullanın
+- Firecrawl API ile ilgili sorunlar için [Firecrawl Documentation](https://docs.firecrawl.dev) kontrol edin
+- Smithery ile ilgili sorunlar için [Smithery Documentation](https://smithery.ai/docs) kontrol edin
 
 ## Lisans
 
-MIT
+MIT License
+
+## Katkıda Bulunma
+
+1. Bu repoyu fork edin
+2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Değişikliklerinizi commit edin (`git commit -m 'Add some amazing feature'`)
+4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
+5. Pull Request oluşturun
+
+## Changelog
+
+### v1.1.0
+- Smithery desteği eklendi
+- Konfigürasyon yönetimi iyileştirildi
+- API key güvenliği artırıldı
+- Docker optimizasyonları
+
+### v1.0.0
+- İlk sürüm
+- Temel TR Dizin arama fonksiyonları
+- MCP server implementasyonu

@@ -1,10 +1,25 @@
+# Smithery yapılandırma dosyası: https://smithery.ai/docs/build/project-config
+
 startCommand:
   type: stdio
   configSchema:
     # JSON Schema defining the configuration options for the MCP.
     type: object
-    properties: {}
-  commandFunction:
-    |-
-    (config) => ({ command: 'python', args: ['-m', 'server'] })
-  exampleConfig: {}
+    required:
+      - firecrawlApiKey
+    properties:
+      firecrawlApiKey:
+        type: string
+        description: "Firecrawl API anahtarı. TR Dizin sitesini scrape etmek için gerekli. https://firecrawl.dev adresinden API key alabilirsiniz."
+        minLength: 1
+    additionalProperties: false
+  commandFunction: |
+    (config) => ({
+      command: 'python',
+      args: ['-m', 'server'],
+      env: {
+        FIRECRAWL_API_KEY: config.firecrawlApiKey
+      }
+    })
+  exampleConfig:
+    firecrawlApiKey: "fc-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
