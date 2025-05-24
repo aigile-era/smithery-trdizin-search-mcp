@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "trdizin": {
+      "command": "python3",
+      "args": ["/Users/utkuunluer/Desktop/trdizinmcp/server.py"],
+      "env": {
+        "PYTHONPATH": "/Users/utkuunluer/Desktop/trdizinmcp",
+        "PATH": "/Users/utkuunluer/Desktop/trdizinmcp/venv/bin:/usr/local/bin:/usr/bin:/bin"
+      }
+    }
+  }
+}
