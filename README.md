@@ -207,3 +207,7 @@ MIT License
 - İlk sürüm
 - Temel TR Dizin arama fonksiyonları
 - MCP server implementasyonu
+
+
+
+

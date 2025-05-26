@@ -11,7 +11,7 @@ mcp = FastMCP("trdizin-mcp")
 scraper = None
 
 def initialize_scraper(config=None):
-    """Scraper'ı konfigürasyonla başlat"""
+    """Scraper'ı konfigürasyonla başlatımı"""
     global scraper
     api_key = None
     
