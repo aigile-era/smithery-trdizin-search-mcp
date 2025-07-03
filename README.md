@@ -18,6 +18,8 @@ Bu MCP server Smithery platformu üzerinden kolayca kullanılabilir:
 3. Firecrawl API anahtarınızı yapılandırmaya ekleyin
 4. Claude Desktop veya diğer MCP istemcilerinizde kullanmaya başlayın
 
+Link: https://smithery.ai/server/%40Utku-Unluer%2Fsmithery-trdizin-search-mcp/tools
+
 ### Firecrawl API Key Alma
 
 1. [Firecrawl.dev](https://firecrawl.dev) adresine gidin
